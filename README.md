@@ -1,2 +1,3 @@
-# nim-wikipedia
-Wikipedia &amp; Wikimedia Async API Lib &amp; App
+# Nim-Wikipedia
+
+- Wikipedia & Wikimedia Async API Lib & App.
