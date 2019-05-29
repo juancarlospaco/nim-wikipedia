@@ -33,8 +33,8 @@ proc foo*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   discard
 
 
-when is_main_module and not defined(js):
+when isMainModule:
   import parseopt, terminal, random
-  {.passL: "-s", passC: "-flto -ffast-math", optimization: size.}
+  {.passL: "-s", passC: "-flto -ffast-math".}
   let wiki = Wikipedia()
   echo wiki.foo()
