@@ -1,3 +1,3 @@
-# Nim-Wikipedia
+# Wikipedia
 
-- Wikipedia & Wikimedia Async API Lib & App.
+- Wikipedia & Wikimedia Async Standalone API Lib & App.
