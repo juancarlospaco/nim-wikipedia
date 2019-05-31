@@ -33,6 +33,10 @@
 
 `nimpretty wikipedia.nim`
 
+- Linter ?.
+
+`nim check --styleCheck:hint wikipedia.nim`
+
 - This works without SSL ?.
 
 No.
