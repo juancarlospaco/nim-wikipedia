@@ -435,43 +435,42 @@ proc rsd*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-proc sanitize-mapdata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc sanitizeMapdata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Performs data validation for Kartographer extension
   clientify(this)
 
 
-proc scribunto-console*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc scribuntoConsole*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Internal module for servicing XHR requests from the Scribunto console.
   clientify(this)
 
 
-proc setglobalaccountstatus*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc setGlobalAccountStatus*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Set a global user's status.
   clientify(this)
 
 
-proc setnotificationtimestamp*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc setNotificationTimestamp*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Update the notification timestamp for watched pages.
   clientify(this)
 
 
-proc setpagelanguage*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc setPageLanguage*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Change the language of a page.
   clientify(this)
 
 
-proc shortenurl*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc shortenUrl*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Shorten a long URL into a shorter one.
   clientify(this)
 
 
-
-proc sitematrix*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc siteMatrix*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get Wikimedia sites list.
   clientify(this)
 
 
-proc spamblacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc spamBlacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Validate one or more URLs against the SpamBlacklist.
   clientify(this)
 
@@ -481,12 +480,12 @@ proc stabilize*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.
   clientify(this)
 
 
-proc stashedit*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc stashEdit*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Prepare an edit in shared cache.
   clientify(this)
 
 
-proc strikevote*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc strikeVote*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Allows admins to strike or unstrike a vote.
   clientify(this)
 
@@ -496,7 +495,7 @@ proc tag*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-proc templatedata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc templateData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Fetch data stored by the TemplateData extension.
   clientify(this)
 
@@ -506,26 +505,24 @@ proc thank*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-
-proc timedtext*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc timedText*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Provides timed text content for usage by $lt;track> elements
   clientify(this)
 
 
-proc titleblacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc titleBlacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Validate a page title, filename, or username against the TitleBlacklist.
   clientify(this)
 
 
-proc transcodereset*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc transcodeReset*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Users with the 'transcode-reset' right can reset and re-run a transcode job.
   clientify(this)
 
 
-proc ulslocalization*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc ulsLocalization*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get the localization of ULS in the given language.
   clientify(this)
-
 
 
 proc unblock*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
@@ -538,7 +535,7 @@ proc undelete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.}
   clientify(this)
 
 
-proc unlinkaccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc unlinkAccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Remove a linked third-party account from the current user.
   clientify(this)
 
@@ -548,23 +545,22 @@ proc upload*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-
-proc userrights*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc userRights*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Change a user's group membership.
   clientify(this)
 
 
-proc validatepassword*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc validatePassword*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Validate a password against the wiki's password policies.
   clientify(this)
 
 
-proc visualeditor*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc visualEditor*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Returns HTML5 for a page from the Parsoid service.
   clientify(this)
 
 
-proc visualeditoredit*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc visualEditorEdit*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Save an HTML5 page to MediaWiki (converted to wikitext via the Parsoid service).
   clientify(this)
 
@@ -574,12 +570,12 @@ proc watch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-proc webapp-manifest*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc webappManifest*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Returns a webapp manifest.
   clientify(this)
 
 
-proc wikilove*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc wikiLove*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Give WikiLove to another user.
   clientify(this)
 
