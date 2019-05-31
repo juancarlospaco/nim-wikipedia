@@ -556,10 +556,12 @@ proc rsd*(this: Wikipedia | AsyncWikipedia): Future[XmlNode] {.multisync.} =
 #   clientify(this)
 
 
-# proc siteMatrix*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Get Wikimedia sites list.
-#   clientify(this)
+proc siteMatrix*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
+  multisync.} =
+  ## Get Wikimedia sites list.
+  clientify(this)
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "sitematrix&smlimit=max&smsiteprop=url|dbname|code|lang|sitename"))
 
 
 proc spamBlacklist*(this: Wikipedia | AsyncWikipedia, url: string): Future[
@@ -724,8 +726,8 @@ when isMainModule:
   #echo wiki.timedText("en", "File:Example.ogv", "vtt").pretty
   # echo wiki.spamBlacklist(
   #     "https://en.wikipedia.org/w/api.php?action=spamblacklist&url=http://www.example.com/|http://www.example.org/").pretty
-  echo wiki.titleBlacklist("Foo", "edit").pretty
-
+  #echo wiki.titleBlacklist("Foo", "edit").pretty
+  echo wiki.siteMatrix().pretty
 
   #discard wiki.rsd()
   #echo wiki.help(modules = "query+info|query+categorymembers").pretty
