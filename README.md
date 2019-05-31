@@ -3,6 +3,26 @@
 - Wikipedia & Wikimedia Async Standalone Single-file API Lib & App, Pretty-Printed JSON output.
 
 
+# Install
+
+- `nimble install ???` ???
+
+
+# Dependencies
+
+- **None**
+
+
+# Platforms
+
+- ✅ Linux
+- ✅ Windows
+- ✅ Mac
+- ✅ Android
+- ✅ Raspberry Pi
+- ✅ BSD
+
+
 # FAQ
 
 - This requires Wikipedia account ?.
