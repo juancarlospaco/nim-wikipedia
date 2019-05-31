@@ -15,7 +15,7 @@ type
   WikipediaBase*[HttpType] = object ## Base object.
     timeout*: byte ## Timeout Seconds for API Calls, byte type, 0~255.
     proxy*: Proxy             ## Network IPv4 / IPv6 Proxy support, Proxy type.
-    token*: string            # Auth Token
+    token*: string            ## Auth Token
   Wikipedia* = WikipediaBase[HttpClient] ##  Sync Wikipedia API Client.
   AsyncWikipedia* = WikipediaBase[AsyncHttpClient] ## Async Wikipedia API Client.
 
@@ -428,8 +428,7 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: string): Future[
 
 
 proc paramInfo*(this: Wikipedia | AsyncWikipedia, modules: string): Future[
-    JsonNode] {.
-  multisync.} =
+    JsonNode] {.multisync.} =
   ## Obtain information about API modules.
   assert modules.split"|".len < 50, "Maximum number of modules is 50"
   clientify(this)
@@ -564,8 +563,7 @@ proc rsd*(this: Wikipedia | AsyncWikipedia): Future[XmlNode] {.multisync.} =
 
 
 proc spamBlacklist*(this: Wikipedia | AsyncWikipedia, url: string): Future[
-    JsonNode] {.
-  multisync.} =
+    JsonNode] {.multisync.} =
   ## Validate one or more URLs against the SpamBlacklist.
   assert url.split"|".len < 50, "Maximum number of modules is 50"
   clientify(this)
@@ -608,11 +606,9 @@ proc spamBlacklist*(this: Wikipedia | AsyncWikipedia, url: string): Future[
 
 
 proc timedText*(this: Wikipedia | AsyncWikipedia, language, title,
-    trackformat: string): Future[JsonNode] {.
-  multisync.} =
+    trackformat: string): Future[JsonNode] {.multisync.} =
   ## Provides timed text content for usage by $lt;track> elements
-  assert language.len == 2,
-    "Language must be ISO Standard 2-Char language code"
+  assert language.len == 2, "Language must be ISO Standard 2-Char lang code"
   assert trackformat in ["srt", "vtt"], "trackformat must be vtt or srt"
   assert title.len > 2, "title must not be empty string"
   clientify(this)
@@ -634,11 +630,9 @@ proc timedText*(this: Wikipedia | AsyncWikipedia, language, title,
 
 
 proc ulsLocalization*(this: Wikipedia | AsyncWikipedia,
-    language: string): Future[JsonNode] {.
-  multisync.} =
+    language: string): Future[JsonNode] {.multisync.} =
   ## Get the localization of ULS in the given language.
-  assert language.len == 2,
-    "Language must be ISO Standard 2-Char language code"
+  assert language.len == 2, "Language must be ISO Standard 2-Char lang code"
   clientify(this)
   result = parseJson(await client.getContent(
       wikipediaUrlTest & "ulslocalization&language=" & language))
