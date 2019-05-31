@@ -2,7 +2,7 @@ import asyncdispatch, httpclient, strutils, json
 
 
 const
-  o = "?format=json&formatversion=2&limit=max&servedby=true&curtimestamp=true&responselanginfo=true&errorformat=plaintext"
+  o = "?format=json&formatversion=2&limit=max&servedby=true&curtimestamp=true&responselanginfo=true&errorformat=plaintext&action="
   wikipediaUrl* = "https://wikipedia.org/w/api.php" & o ## Wikipedia API URL.
   mediaWikiUrl* = "https://mediawiki.org/w/api.php" & o ## MediaWiki API URL.
   wikipediaUrlTest* = "https://test.wikipedia.org/w/api.php" & o ## Test Wikipedia API URL (Fake).
@@ -30,22 +30,22 @@ template clientify(this: Wikipedia | AsyncWikipedia): untyped =
     "application/json", "content-type": "application/json"})
 
 
-proc abusefiltercheckmatch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc abuseFilterCheckMatch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Check to see if an AbuseFilter matches a set of variables, an edit, or a logged AbuseFilter event.
   clientify(this)
 
 
-proc abusefilterchecksyntax*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc abuseFilterCheckSyntax*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Check syntax of an AbuseFilter filter.
   clientify(this)
 
 
-proc abusefilterevalexpression*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc abuseFilterEvalExpression*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Evaluates an AbuseFilter expression.
   clientify(this)
 
 
-proc abusefilterunblockautopromote*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc abuseFilterUnblockAutopromote*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Unblocks a user from receiving autopromotions due to an abusefilter consequence.
   clientify(this)
 
@@ -55,75 +55,75 @@ proc antispoof*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.
   clientify(this)
 
 
-proc block*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc blockUser*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Block a user.
   clientify(this)
 
 
-proc bouncehandler*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc bounceHandler*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Receive a bounce email and process it to handle the failing recipient.
   clientify(this)
 
 
-proc categorytree*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc categoryTree*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Internal module for the CategoryTree extension.
   clientify(this)
 
 
-proc centralauthtoken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc centralAuthToken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Fetch a centralauthtoken for making an authenticated request to an attached wiki.
   clientify(this)
 
 
-proc centralnoticecdncacheupdatebanner*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc centralNoticeCdnCacheUpdateBanner*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Request the purge of banner content stored in the CDN (front-end) cache for anonymous users, for the requested banner and language
   clientify(this)
 
 
-proc centralnoticechoicedata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc centralNoticeChoiceData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get data needed to choose a banner for a given project and language
   clientify(this)
 
 
-proc centralnoticequerycampaign*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc centralNoticeQueryCampaign*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get all configuration settings for a campaign.
   clientify(this)
 
 
-proc changeauthenticationdata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc changeAuthenticationData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Change authentication data for the current user.
   clientify(this)
 
 
-proc checktoken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc checkToken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Check the validity of a token from action=query&meta=tokens.
   clientify(this)
 
 
-proc cirrus-config-dump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cirrusConfigDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Dump of CirrusSearch configuration.
   clientify(this)
 
 
-proc cirrus-mapping-dump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cirrusMappingDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Dump of CirrusSearch mapping for this wiki.
   clientify(this)
 
 
-proc cirrus-profiles-dump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cirrusProfilesDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Dump of CirrusSearch profiles for this wiki.
   clientify(this)
 
 
-proc cirrus-settings-dump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cirrusSettingsDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Dump of CirrusSearch settings for this wiki.
   clientify(this)
 
-proc clearhasmsg*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc clearHasmsg*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Clears the hasmsg flag for the current user.
   clientify(this)
 
-proc clientlogin*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc clientLogin*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Log in to the wiki using the interactive flow.
   clientify(this)
 
@@ -131,40 +131,40 @@ proc compare*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} 
   ## Get the difference between two pages.
   clientify(this)
 
-proc createaccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc createAccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Create a new user account.
   clientify(this)
 
-proc cspreport*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cspReport*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Used by browsers to report violations of the Content Security Policy. This module should never be used, except when used automatically by a CSP compliant web browser.
   clientify(this)
 
-proc cxconfiguration*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cxConfiguration*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Fetch the Content Translation configuration json for the given language pair.
   clientify(this)
 
 
-proc cxdelete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cxDelete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Delete a draft translation created using the Content Translation extension.
   clientify(this)
 
 
-proc cxpublish*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cxPublish*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Save a page created using the Content Translation extension.
   clientify(this)
 
 
-proc cxsave*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cxSave*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## This module allows to save draft translations by section to save bandwidth and to collect parallel corpora.
   clientify(this)
 
 
-proc cxsuggestionlist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cxSuggestionList*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Manage the suggestion lists. Add suggestions to lists and remove them.
   clientify(this)
 
 
-proc cxtoken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc cxToken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get JWT tokens to authenticate with cxserver.
   clientify(this)
 
@@ -174,17 +174,17 @@ proc delete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-proc deleteglobalaccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc deleteGlobalAccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Delete a global user.
   clientify(this)
 
 
-proc echomarkread*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc echoMarkRead*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Mark notifications as read for the current user.
   clientify(this)
 
 
-proc echomarkseen*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc echoMarkSeen*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Mark notifications as seen for the current user.
   clientify(this)
 
@@ -193,63 +193,63 @@ proc edit*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Create and edit pages.
   clientify(this)
 
-proc editmassmessagelist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc editMassMessageList*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Edit a mass message delivery list.
   clientify(this)
 
-proc emailuser*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc emailUser*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Email a user.
   clientify(this)
 
 
-proc expandtemplates*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc expandTemplates*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Expands all templates within wikitext.
   clientify(this)
 
-proc fancycaptchareload*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc fancyCaptchaReload*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get a new FancyCaptcha.
   clientify(this)
 
-proc featuredfeed*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc featuredFeed*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Returns a featured content feed.
   clientify(this)
 
 
-proc feedcontributions*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc feedContributions*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Returns a user contributions feed.
   clientify(this)
 
-proc feedrecentchanges*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc feedRecentChanges*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Returns a recent changes feed.
   clientify(this)
 
-proc feedwatchlist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc feedWatchlist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Returns a watchlist feed.
   clientify(this)
 
 
-proc filerevert*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc fileRevert*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Revert a file to an old version.
   clientify(this)
 
-proc flagconfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc flagConfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get basic information about review flag configuration for this site.
   clientify(this)
 
-proc globalblock*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc globalBlock*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Globally block or unblock a user.
   clientify(this)
 
 
-proc globalpreferenceoverrides*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc globalPreferenceOverrides*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Change local overrides for global preferences for the current user.
   clientify(this)
 
-proc globalpreferences*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc globalPreferences*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Change global preferences of the current user.
   clientify(this)
 
-proc globaluserrights*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc globalUserRights*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Add/remove a user to/from global groups.
   clientify(this)
 
@@ -262,29 +262,29 @@ proc help*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Display help for the specified modules.
   clientify(this)
 
-proc imagerotate*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc imageRotate*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## This module has been disabled.
   clientify(this)
 
 
-proc import*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc importFile*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Import a page from another wiki, or from an XML file.
   clientify(this)
 
-proc jsonconfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc jsonConfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Allows direct access to JsonConfig subsystem.
   clientify(this)
 
-proc jsondata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc jsonData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Retrieve localized JSON data.
   clientify(this)
 
 
-proc languagesearch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc languageSearch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Search for language names in any script.
   clientify(this)
 
-proc linkaccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc linkAccount*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Link an account from a third-party provider to the current user.
   clientify(this)
 
@@ -297,20 +297,20 @@ proc logout*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Log out and clear session data.
   clientify(this)
 
-proc managetags*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc manageTags*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Perform management tasks relating to change tags.
   clientify(this)
 
-proc massmessage*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc massMessage*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Send a message to a list of pages.
   clientify(this)
 
 
-proc mergehistory*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc mergeHistory*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Merge page histories.
   clientify(this)
 
-proc mobileview*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc mobileView*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Returns data needed for mobile views.
   clientify(this)
 
@@ -319,12 +319,11 @@ proc move*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-
-proc oathvalidate*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc oathValidate*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Validate a two-factor authentication (OATH) token.
   clientify(this)
 
-proc opensearch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc openSearch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Search the wiki using the OpenSearch protocol.
   clientify(this)
 
@@ -333,42 +332,43 @@ proc options*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} 
   clientify(this)
 
 
-
-proc pagetriageaction*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc pageTriageAction*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Mark an article as reviewed or unreviewed.
   clientify(this)
 
-proc pagetriagelist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc pageTriageList*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get a list of page IDs for building a PageTriage queue.
   clientify(this)
 
-proc pagetriagestats*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc pageTriageStats*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Get the stats for page triage.
   clientify(this)
 
 
-
-proc pagetriagetagcopyvio*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc pageTriageTagCopyVio*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Tag a revision as a likely copyright violation.
   clientify(this)
 
-proc pagetriagetagging*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+
+proc pageTriageTagging*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Add tags to an article.
   clientify(this)
 
-proc paraminfo*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+
+proc paramInfo*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Obtain information about API modules.
   clientify(this)
-
 
 
 proc parse*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Parses content and returns parser output.
   clientify(this)
 
-proc parsoid-batch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+
+proc parsoidBatch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Batch API for Parsoid
   clientify(this)
+
 
 proc patrol*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Patrol a page or revision.
@@ -390,22 +390,22 @@ proc query*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-proc readinglists*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc readingLists*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Reading list write operations.
   clientify(this)
 
 
-proc record-lint*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc recordLint*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Record a lint error in the database
   clientify(this)
 
 
-proc removeauthenticationdata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc removeAuthenticationData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Remove authentication data for the current user.
   clientify(this)
 
 
-proc resetpassword*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc resetPassword*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Send a password reset email to a user.
   clientify(this)
 
@@ -415,12 +415,12 @@ proc review*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   clientify(this)
 
 
-proc reviewactivity*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc reviewActivity*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Advertise or de-advertise yourself as reviewing an unreviewed page or unreviewed changes.
   clientify(this)
 
 
-proc revisiondelete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc revisionDelete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
   ## Delete and undelete revisions.
   clientify(this)
 
