@@ -617,10 +617,13 @@ proc timedText*(this: Wikipedia | AsyncWikipedia, language, title,
       "&trackformat=" & trackformat))
 
 
-# proc titleBlacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Validate a page title, filename, or username against the TitleBlacklist.
-#   clientify(this)
+proc titleBlacklist*(this: Wikipedia | AsyncWikipedia, tbtitle, tbaction: string):
+    Future[JsonNode] {.multisync.} =
+  ## Validate a page title, filename, or username against the TitleBlacklist.
+  assert tbaction in ["create", "edit", "upload", "createtalk", "createpage", "move", "new-account"]
+  assert tbtitle.len > 2, "tbtitle must not be empty string"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "titleblacklist&tbnooverride=false&tbaction=" & tbaction & "&tbtitle=" & tbtitle))
 
 
 # proc transcodeReset*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -719,8 +722,10 @@ when isMainModule:
   #echo wiki.zeroconfig()
   #echo wiki.ulsLocalization("en").pretty
   #echo wiki.timedText("en", "File:Example.ogv", "vtt").pretty
-  echo wiki.spamBlacklist(
-      "https://en.wikipedia.org/w/api.php?action=spamblacklist&url=http://www.example.com/|http://www.example.org/").pretty
+  # echo wiki.spamBlacklist(
+  #     "https://en.wikipedia.org/w/api.php?action=spamblacklist&url=http://www.example.com/|http://www.example.org/").pretty
+  echo wiki.titleBlacklist("Foo", "edit").pretty
+
 
   #discard wiki.rsd()
   #echo wiki.help(modules = "query+info|query+categorymembers").pretty
