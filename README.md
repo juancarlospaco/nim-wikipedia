@@ -29,6 +29,10 @@
 
 `nim doc wikipedia.nim`
 
+- Coding Style Guide ?.
+
+`nimpretty wikipedia.nim`
+
 - This works without SSL ?.
 
 No.
