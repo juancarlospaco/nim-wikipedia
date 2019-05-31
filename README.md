@@ -25,27 +25,27 @@
 
 # FAQ
 
-- This requires Wikipedia account ?.
+- Developer Documentation ?.
 
-No. But is recommended to have one whatsoever, is an awesome project.
+`nim doc wikipedia.nim`
 
 - This works without SSL ?.
 
 No.
 
-- Developer Documentation ?.
+- This requires Wikipedia account ?.
 
-`nim doc wikipedia.nim`
+No. But is recommended to have one whatsoever, is an awesome project.
+
+- Are Deprecated endpoints supported ?.
+
+No.
 
 - I dont like some of the naming ?.
 
 Me neither.
 
 But it follows Wikipedia API Designs. 🤷‍
-
-- Are Deprecated endpoints supported ?.
-
-No.
 
 - An specific API Endpoint randomly fails ?.
 
