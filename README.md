@@ -46,3 +46,9 @@ But it follows Wikipedia API Designs. 🤷‍
 - Are Deprecated endpoints supported ?.
 
 No.
+
+- An specific API Endpoint randomly fails ?.
+
+Some endpoints are marked as "This module is internal or unstable. Its operation may change without notice."
+
+Not my Bug.
