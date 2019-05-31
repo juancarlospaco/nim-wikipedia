@@ -42,3 +42,7 @@ No.
 Me neither.
 
 But it follows Wikipedia API Designs. 🤷‍
+
+- Are Deprecated endpoints supported ?.
+
+No.
