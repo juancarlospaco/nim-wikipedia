@@ -15,7 +15,7 @@ type
   WikipediaBase*[HttpType] = object ## Base object.
     timeout*: byte ## Timeout Seconds for API Calls, byte type, 0~255.
     proxy*: Proxy             ## Network IPv4 / IPv6 Proxy support, Proxy type.
-    token*: string           # Auth Token
+    token*: string            # Auth Token
   Wikipedia* = WikipediaBase[HttpClient] ##  Sync Wikipedia API Client.
   AsyncWikipedia* = WikipediaBase[AsyncHttpClient] ## Async Wikipedia API Client.
 
@@ -308,7 +308,8 @@ proc login(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
 #   clientify(this)
 
 
-proc help*(this: Wikipedia | AsyncWikipedia, modules: string): Future[JsonNode] {.multisync.} =
+proc help*(this: Wikipedia | AsyncWikipedia, modules: string): Future[
+    JsonNode] {.multisync.} =
   ## Display help for the specified modules.
   assert modules.split"|".len < 50, "Maximum number of modules is 50"
   clientify(this)
@@ -426,7 +427,8 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: string): Future[JsonNode] 
 #   clientify(this)
 
 
-proc paramInfo*(this: Wikipedia | AsyncWikipedia, modules: string): Future[JsonNode] {.
+proc paramInfo*(this: Wikipedia | AsyncWikipedia, modules: string): Future[
+    JsonNode] {.
   multisync.} =
   ## Obtain information about API modules.
   assert modules.split"|".len < 50, "Maximum number of modules is 50"
@@ -561,12 +563,14 @@ proc rsd*(this: Wikipedia | AsyncWikipedia): Future[XmlNode] {.multisync.} =
 #   clientify(this)
 
 
-proc spamBlacklist*(this: Wikipedia | AsyncWikipedia, url: string): Future[JsonNode] {.
+proc spamBlacklist*(this: Wikipedia | AsyncWikipedia, url: string): Future[
+    JsonNode] {.
   multisync.} =
   ## Validate one or more URLs against the SpamBlacklist.
   assert url.split"|".len < 50, "Maximum number of modules is 50"
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "spamblacklist&url=" & url))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "spamblacklist&url=" & url))
 
 
 # proc stabilize*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -603,14 +607,18 @@ proc spamBlacklist*(this: Wikipedia | AsyncWikipedia, url: string): Future[JsonN
 #   clientify(this)
 
 
-proc timedText*(this: Wikipedia | AsyncWikipedia, language, title, trackformat: string): Future[JsonNode] {.
+proc timedText*(this: Wikipedia | AsyncWikipedia, language, title,
+    trackformat: string): Future[JsonNode] {.
   multisync.} =
   ## Provides timed text content for usage by $lt;track> elements
-  assert language.len == 2, "Language must be ISO Standard 2-Char language code"
+  assert language.len == 2,
+    "Language must be ISO Standard 2-Char language code"
   assert trackformat in ["srt", "vtt"], "trackformat must be vtt or srt"
   assert title.len > 2, "title must not be empty string"
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "timedtext&lang=" & language & "&title=" & title & "&trackformat=" & trackformat))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "timedtext&lang=" & language & "&title=" & title &
+      "&trackformat=" & trackformat))
 
 
 # proc titleBlacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -625,12 +633,15 @@ proc timedText*(this: Wikipedia | AsyncWikipedia, language, title, trackformat: 
 #   clientify(this)
 
 
-proc ulsLocalization*(this: Wikipedia | AsyncWikipedia, language: string): Future[JsonNode] {.
+proc ulsLocalization*(this: Wikipedia | AsyncWikipedia,
+    language: string): Future[JsonNode] {.
   multisync.} =
   ## Get the localization of ULS in the given language.
-  assert language.len == 2, "Language must be ISO Standard 2-Char language code"
+  assert language.len == 2,
+    "Language must be ISO Standard 2-Char language code"
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "ulslocalization&language=" & language))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "ulslocalization&language=" & language))
 
 
 # proc unblock*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
@@ -688,7 +699,8 @@ proc webappManifest*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
   multisync.} =
   ## Returns a WebApp Manifest.
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "webapp-manifest"))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "webapp-manifest"))
 
 
 # proc wikiLove*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -713,7 +725,8 @@ when isMainModule:
   #echo wiki.zeroconfig()
   #echo wiki.ulsLocalization("en").pretty
   #echo wiki.timedText("en", "File:Example.ogv", "vtt").pretty
-  echo wiki.spamBlacklist("https://en.wikipedia.org/w/api.php?action=spamblacklist&url=http://www.example.com/|http://www.example.org/").pretty
+  echo wiki.spamBlacklist(
+      "https://en.wikipedia.org/w/api.php?action=spamblacklist&url=http://www.example.com/|http://www.example.org/").pretty
 
   #discard wiki.rsd()
   #echo wiki.help(modules = "query+info|query+categorymembers").pretty
