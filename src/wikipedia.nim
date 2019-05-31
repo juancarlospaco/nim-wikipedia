@@ -1,8 +1,10 @@
 import asyncdispatch, httpclient, strutils, json
+from xmlparser import parseXml
+from xmltree import XmlNode
 
 
 const
-  o = "?format=json&formatversion=2&limit=max&servedby=true&curtimestamp=true&responselanginfo=true&errorformat=plaintext&action="
+  o = "?format=json&formatversion=2&servedby=true&curtimestamp=true&responselanginfo=true&errorformat=plaintext&action="
   wikipediaUrl* = "https://wikipedia.org/w/api.php" & o ## Wikipedia API URL.
   mediaWikiUrl* = "https://mediawiki.org/w/api.php" & o ## MediaWiki API URL.
   wikipediaUrlTest* = "https://test.wikipedia.org/w/api.php" & o ## Test Wikipedia API URL (Fake).
@@ -13,6 +15,7 @@ type
   WikipediaBase*[HttpType] = object ## Base object.
     timeout*: byte ## Timeout Seconds for API Calls, byte type, 0~255.
     proxy*: Proxy             ## Network IPv4 / IPv6 Proxy support, Proxy type.
+    token*: string           # Auth Token
   Wikipedia* = WikipediaBase[HttpClient] ##  Sync Wikipedia API Client.
   AsyncWikipedia* = WikipediaBase[AsyncHttpClient] ## Async Wikipedia API Client.
 
@@ -28,6 +31,13 @@ template clientify(this: Wikipedia | AsyncWikipedia): untyped =
       proxy = when declared(this.proxy): this.proxy else: nil, userAgent = "")
   client.headers = newHttpHeaders({"dnt": "1", "accept":
     "application/json", "content-type": "application/json"})
+
+
+proc login(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+  ## Check to see if an AbuseFilter matches a set of variables, an edit, or a logged AbuseFilter event.
+  clientify(this)
+  const o = "query&meta=tokens&type=createaccount|csrf|deleteglobalaccount|login|patrol|rollback|setglobalaccountstatus|userrights|watch"
+  result = parseJson(await client.getContent(wikipediaUrlTest & o))
 
 
 # proc abuseFilterCheckMatch*(this: Wikipedia | AsyncWikipedia): Future[
@@ -142,10 +152,6 @@ template clientify(this: Wikipedia | AsyncWikipedia): untyped =
 #   ## Clears the hasmsg flag for the current user.
 #   clientify(this)
 
-# proc clientLogin*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Log in to the wiki using the interactive flow.
-#   clientify(this)
 
 # proc compare*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
 #   ## Get the difference between two pages.
@@ -301,14 +307,14 @@ template clientify(this: Wikipedia | AsyncWikipedia): untyped =
 #   ## Access graph tag functionality.
 #   clientify(this)
 
-proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[JsonNode] {.multisync.} =
+
+proc help*(this: Wikipedia | AsyncWikipedia, modules: string): Future[JsonNode] {.multisync.} =
   ## Display help for the specified modules.
-  assert modules.len < 50, "Maximum number of modules is 50"
+  assert modules.split"|".len < 50, "Maximum number of modules is 50"
   clientify(this)
   const o = "help&submodules=true&wrap=true&toc=true&modules="
-  let a = modules.join"+"
-  let b = await client.getContent(wikipediaUrlTest & o & "help")
-  return parseJson(b)
+  result = parseJson(await client.getContent(wikipediaUrlTest & o & modules))
+
 
 # proc imageRotate*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
 #   multisync.} =
@@ -420,10 +426,13 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[J
 #   clientify(this)
 
 
-# proc paramInfo*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Obtain information about API modules.
-#   clientify(this)
+proc paramInfo*(this: Wikipedia | AsyncWikipedia, modules: string): Future[JsonNode] {.
+  multisync.} =
+  ## Obtain information about API modules.
+  assert modules.split"|".len < 50, "Maximum number of modules is 50"
+  clientify(this)
+  const o = "paraminfo&helpformat=raw&modules="
+  result = parseJson(await client.getContent(wikipediaUrlTest & o & modules))
 
 
 # proc parse*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
@@ -504,9 +513,10 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[J
 #   clientify(this)
 
 
-# proc rsd*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
-#   ## Export an RSD (Really Simple Discovery) schema.
-#   clientify(this)
+proc rsd*(this: Wikipedia | AsyncWikipedia): Future[XmlNode] {.multisync.} =
+  ## Export an RSD (Really Simple Discovery) schema.
+  clientify(this)
+  result = parseXml(await client.getContent(wikipediaUrlTest & "rsd"))
 
 
 # proc sanitizeMapdata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -551,10 +561,12 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[J
 #   clientify(this)
 
 
-# proc spamBlacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Validate one or more URLs against the SpamBlacklist.
-#   clientify(this)
+proc spamBlacklist*(this: Wikipedia | AsyncWikipedia, url: string): Future[JsonNode] {.
+  multisync.} =
+  ## Validate one or more URLs against the SpamBlacklist.
+  assert url.split"|".len < 50, "Maximum number of modules is 50"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "spamblacklist&url=" & url))
 
 
 # proc stabilize*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -591,10 +603,14 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[J
 #   clientify(this)
 
 
-# proc timedText*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Provides timed text content for usage by $lt;track> elements
-#   clientify(this)
+proc timedText*(this: Wikipedia | AsyncWikipedia, language, title, trackformat: string): Future[JsonNode] {.
+  multisync.} =
+  ## Provides timed text content for usage by $lt;track> elements
+  assert language.len == 2, "Language must be ISO Standard 2-Char language code"
+  assert trackformat in ["srt", "vtt"], "trackformat must be vtt or srt"
+  assert title.len > 2, "title must not be empty string"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "timedtext&lang=" & language & "&title=" & title & "&trackformat=" & trackformat))
 
 
 # proc titleBlacklist*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -609,10 +625,12 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[J
 #   clientify(this)
 
 
-# proc ulsLocalization*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Get the localization of ULS in the given language.
-#   clientify(this)
+proc ulsLocalization*(this: Wikipedia | AsyncWikipedia, language: string): Future[JsonNode] {.
+  multisync.} =
+  ## Get the localization of ULS in the given language.
+  assert language.len == 2, "Language must be ISO Standard 2-Char language code"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "ulslocalization&language=" & language))
 
 
 # proc unblock*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
@@ -666,10 +684,11 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[J
 #   clientify(this)
 
 
-# proc webappManifest*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Returns a webapp manifest.
-#   clientify(this)
+proc webappManifest*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
+  multisync.} =
+  ## Returns a WebApp Manifest.
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "webapp-manifest"))
 
 
 # proc wikiLove*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -678,14 +697,24 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: varargs[string]): Future[J
 #   clientify(this)
 
 
-# proc zeroconfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Get configuration of the Zero extension.
-#   clientify(this)
+proc zeroconfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
+  multisync.} =
+  ## Get configuration of the Zero extension.
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "zeroconfig"))
 
 
 when isMainModule:
   # import parseopt, terminal, random
   # {.passL: "-s", passC: "-flto -ffast-math".}
+  # let wiki = Wikipedia(token: Wikipedia().login()["query"]["tokens"]["logintoken"].getStr.strip)
   let wiki = Wikipedia()
-  echo wiki.help().pretty
+  #echo wiki.webappManifest()
+  #echo wiki.zeroconfig()
+  #echo wiki.ulsLocalization("en").pretty
+  #echo wiki.timedText("en", "File:Example.ogv", "vtt").pretty
+  echo wiki.spamBlacklist("https://en.wikipedia.org/w/api.php?action=spamblacklist&url=http://www.example.com/|http://www.example.org/").pretty
+
+  #discard wiki.rsd()
+  #echo wiki.help(modules = "query+info|query+categorymembers").pretty
+  #echo wiki.paramInfo(modules = "parse|phpfm|query%2Ballpages%7Cquery%2Bsiteinfo").pretty
