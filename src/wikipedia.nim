@@ -76,10 +76,11 @@ proc abuseFilterEvalExpression*(this: Wikipedia | AsyncWikipedia,
 #   clientify(this)
 
 
-# proc antispoof*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Check a username against AntiSpoof's normalisation checks.
-#   clientify(this)
+proc antispoof*(this: Wikipedia | AsyncWikipedia, username: string): Future[JsonNode] {.multisync.} =
+  ## Check a username against AntiSpoof's normalisation checks.
+  assert username.len > 2, "username must not be empty string"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "antispoof&username=" & username))
 
 
 # proc blockUser*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -776,8 +777,8 @@ when isMainModule:
   # echo wiki.abuseFilterCheckMatch(filter = """!("autoconfirmed"%20in%20user_groups)""",
   #     rcid = 15).pretty
   #echo wiki.abuseFilterCheckSyntax("foo").pretty
-  echo wiki.abuseFilterEvalExpression("""lcase("FOO")""").pretty
-
+  #echo wiki.abuseFilterEvalExpression("""lcase("FOO")""").pretty
+  #echo wiki.antispoof("Foo").pretty
 
 
   #discard wiki.rsd()
