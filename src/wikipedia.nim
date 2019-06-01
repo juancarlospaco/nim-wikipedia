@@ -33,17 +33,23 @@ template clientify(this: Wikipedia | AsyncWikipedia): untyped =
     "application/json", "content-type": "application/json"})
 
 
-proc login(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+proc getTokens*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
+  multisync.} =
   ## Check to see if an AbuseFilter matches a set of variables, an edit, or a logged AbuseFilter event.
   clientify(this)
   const o = "query&meta=tokens&type=createaccount|csrf|deleteglobalaccount|login|patrol|rollback|setglobalaccountstatus|userrights|watch"
   result = parseJson(await client.getContent(wikipediaUrlTest & o))
 
 
-# proc abuseFilterCheckMatch*(this: Wikipedia | AsyncWikipedia): Future[
-#     JsonNode] {.multisync.} =
-#   ## Check to see if an AbuseFilter matches a set of variables, an edit, or a logged AbuseFilter event.
-#   clientify(this)
+proc abuseFilterCheckMatch*(this: Wikipedia | AsyncWikipedia, filter: string,
+    rcid: Natural = 0, logid: Natural = 0): Future[JsonNode] {.multisync.} =
+  ## Check to see if an AbuseFilter matches a set of variables, an edit, or a logged AbuseFilter event.
+  clientify(this)
+  assert filter.len > 2, "filter must not be empty string"
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "abusefiltercheckmatch&filter=" & filter &
+  (if rcid != 0: "&rcid=" & $rcid else: "") & (
+      if logid != 0: "&logid=" & $logid else: "")))
 
 
 # proc abuseFilterCheckSyntax*(this: Wikipedia | AsyncWikipedia): Future[
@@ -162,10 +168,16 @@ proc login(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
 #   ## Create a new user account.
 #   clientify(this)
 
-# proc cspReport*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Used by browsers to report violations of the Content Security Policy. This module should never be used, except when used automatically by a CSP compliant web browser.
-#   clientify(this)
+proc cspReport*(this: Wikipedia | AsyncWikipedia, source: string): Future[
+    JsonNode] {.multisync.} =
+  ## Used by browsers to report violations of the Content Security Policy.
+  ## This module should never be used, except when used automatically by a CSP compliant web browser.
+  ## Honestly I dunno what this should do. Technical Documentation of Wikipedia API is scarce.
+  assert source.len > 1, "source must not be empty string"
+  clientify(this)
+  result = parseJson(await client.postContent(
+      wikipediaUrlTest & "cspreport&reportonly=true&source=" & source))
+
 
 # proc cxConfiguration*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
 #   multisync.} =
@@ -340,11 +352,13 @@ proc jsonConfig*(this: Wikipedia | AsyncWikipedia, namespace: int,
       command))
 
 
-proc jsonData*(this: Wikipedia | AsyncWikipedia, title: string): Future[JsonNode] {.multisync.} =
+proc jsonData*(this: Wikipedia | AsyncWikipedia, title: string): Future[
+    JsonNode] {.multisync.} =
   ## Retrieve localized JSON data.
   assert title.len > 2, "title must not be empty string"
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "jsondata&title=" & title))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "jsondata&title=" & title))
 
 
 # proc languageSearch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -644,7 +658,8 @@ proc titleBlacklist*(this: Wikipedia | AsyncWikipedia, tbtitle,
   assert tbtitle.len > 2, "tbtitle must not be empty string"
   clientify(this)
   result = parseJson(await client.getContent(
-      wikipediaUrlTest & "titleblacklist&tbnooverride=false&tbaction=" & tbaction &
+      wikipediaUrlTest & "titleblacklist&tbnooverride=false&tbaction=" &
+          tbaction &
       "&tbtitle=" & tbtitle))
 
 
@@ -738,7 +753,7 @@ proc zeroconfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
 when isMainModule:
   # import parseopt, terminal, random
   # {.passL: "-s", passC: "-flto -ffast-math".}
-  # let wiki = Wikipedia(token: Wikipedia().login()["query"]["tokens"]["logintoken"].getStr.strip)
+  # let wiki = Wikipedia(token: Wikipedia().getTokens()["query"]["tokens"]["logintoken"].getStr.strip)
   let wiki = Wikipedia()
   #echo wiki.webappManifest()
   #echo wiki.zeroconfig()
@@ -751,7 +766,9 @@ when isMainModule:
   #echo wiki.shortenUrl("https://en.wikipedia.org/wiki/Arctica").pretty
   #echo wiki.sanitizeMapdata(parseJson("""{"foo":"bar"}""")).pretty
   #echo wiki.jsonConfig(480, "status").pretty
-  echo wiki.jsonData("Sample.tab").pretty
+  #echo wiki.jsonData("Sample.tab").pretty
+  echo wiki.abuseFilterCheckMatch(filter = """!("autoconfirmed"%20in%20user_groups)""",
+      rcid = 15).pretty
 
 
   #discard wiki.rsd()
