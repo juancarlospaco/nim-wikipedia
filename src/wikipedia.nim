@@ -37,8 +37,8 @@ proc getTokens*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
   multisync.} =
   ## Check to see if an AbuseFilter matches a set of variables, an edit, or a logged AbuseFilter event.
   clientify(this)
-  const o = "query&meta=tokens&type=createaccount|csrf|deleteglobalaccount|login|patrol|rollback|setglobalaccountstatus|userrights|watch"
-  result = parseJson(await client.getContent(wikipediaUrlTest & o))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "query&meta=tokens&type=createaccount|csrf|deleteglobalaccount|login|patrol|rollback|setglobalaccountstatus|userrights|watch"))
 
 
 proc abuseFilterCheckMatch*(this: Wikipedia | AsyncWikipedia, filter: string,
@@ -76,11 +76,13 @@ proc abuseFilterEvalExpression*(this: Wikipedia | AsyncWikipedia,
 #   clientify(this)
 
 
-proc antispoof*(this: Wikipedia | AsyncWikipedia, username: string): Future[JsonNode] {.multisync.} =
+proc antispoof*(this: Wikipedia | AsyncWikipedia, username: string): Future[
+    JsonNode] {.multisync.} =
   ## Check a username against AntiSpoof's normalisation checks.
   assert username.len > 2, "username must not be empty string"
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "antispoof&username=" & username))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "antispoof&username=" & username))
 
 
 # proc blockUser*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -89,10 +91,13 @@ proc antispoof*(this: Wikipedia | AsyncWikipedia, username: string): Future[Json
 #   clientify(this)
 
 
-# proc bounceHandler*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Receive a bounce email and process it to handle the failing recipient.
-#   clientify(this)
+proc bounceHandler*(this: Wikipedia | AsyncWikipedia, email: string): Future[
+    JsonNode] {.multisync.} =
+  ## Receive a bounce email and process it to handle the failing recipient.
+  assert email.len > 2, "email must not be empty string"
+  clientify(this)
+  result = parseJson(await client.postContent(
+      wikipediaUrlTest & "bouncehandler&email=" & email))
 
 
 # proc categoryTree*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -779,6 +784,7 @@ when isMainModule:
   #echo wiki.abuseFilterCheckSyntax("foo").pretty
   #echo wiki.abuseFilterEvalExpression("""lcase("FOO")""").pretty
   #echo wiki.antispoof("Foo").pretty
+  echo wiki.bounceHandler("user@example.com").pretty
 
 
   #discard wiki.rsd()
