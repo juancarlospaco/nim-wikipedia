@@ -328,10 +328,13 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: string): Future[
 #   ## Import a page from another wiki, or from an XML file.
 #   clientify(this)
 
-# proc jsonConfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Allows direct access to JsonConfig subsystem.
-#   clientify(this)
+proc jsonConfig*(this: Wikipedia | AsyncWikipedia, namespace: int, command: string): Future[JsonNode] {.
+  multisync.} =
+  ## Allows direct access to JsonConfig subsystem.
+  assert command in ["status", "reset", "reload"], "command must be one of status, reset, reload"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "jsonconfig&namespace=" & $namespace & "&command=" & command))
+
 
 # proc jsonData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
 #   multisync.} =
@@ -520,10 +523,11 @@ proc rsd*(this: Wikipedia | AsyncWikipedia): Future[XmlNode] {.multisync.} =
   result = parseXml(await client.getContent(wikipediaUrlTest & "rsd"))
 
 
-# proc sanitizeMapdata*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Performs data validation for Kartographer extension
-#   clientify(this)
+proc sanitizeMapdata*(this: Wikipedia | AsyncWikipedia, text: JsonNode): Future[JsonNode] {.
+  multisync.} =
+  ## Performs data validation for Kartographer extension
+  clientify(this)
+  result = parseJson(await client.postContent(wikipediaUrlTest & "sanitize-mapdata&text=" & $text))
 
 
 # proc scribuntoConsole*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -550,10 +554,12 @@ proc rsd*(this: Wikipedia | AsyncWikipedia): Future[XmlNode] {.multisync.} =
 #   clientify(this)
 
 
-# proc shortenUrl*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Shorten a long URL into a shorter one.
-#   clientify(this)
+proc shortenUrl*(this: Wikipedia | AsyncWikipedia, url: string): Future[JsonNode] {.
+  multisync.} =
+  ## Shorten a long URL into a shorter one. Some servers may have this disabled.
+  assert url.len > 4 and url.normalize.startsWith("http"), "URL must be valid HTTP URL"
+  clientify(this)
+  result = parseJson(await client.postContent(wikipediaUrlTest & "shortenurl&url=" & url))
 
 
 proc siteMatrix*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -727,7 +733,11 @@ when isMainModule:
   # echo wiki.spamBlacklist(
   #     "https://en.wikipedia.org/w/api.php?action=spamblacklist&url=http://www.example.com/|http://www.example.org/").pretty
   #echo wiki.titleBlacklist("Foo", "edit").pretty
-  echo wiki.siteMatrix().pretty
+  #echo wiki.siteMatrix().pretty
+  #echo wiki.shortenUrl("https://en.wikipedia.org/wiki/Arctica").pretty
+  #echo wiki.sanitizeMapdata(parseJson("""{"foo":"bar"}""")).pretty
+  echo wiki.jsonConfig(480, "status").pretty
+
 
   #discard wiki.rsd()
   #echo wiki.help(modules = "query+info|query+categorymembers").pretty
