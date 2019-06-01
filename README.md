@@ -59,4 +59,6 @@ But it follows Wikipedia API Designs. 🤷‍
 
 Some endpoints are marked as "This module is internal or unstable. Its operation may change without notice."
 
+Technical Documentation of Wikipedia API is scarce.
+
 Not my Bug.
