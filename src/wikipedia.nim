@@ -52,16 +52,22 @@ proc abuseFilterCheckMatch*(this: Wikipedia | AsyncWikipedia, filter: string,
       if logid != 0: "&logid=" & $logid else: "")))
 
 
-# proc abuseFilterCheckSyntax*(this: Wikipedia | AsyncWikipedia): Future[
-#     JsonNode] {.multisync.} =
-#   ## Check syntax of an AbuseFilter filter.
-#   clientify(this)
+proc abuseFilterCheckSyntax*(this: Wikipedia | AsyncWikipedia,
+    filter: string): Future[JsonNode] {.multisync.} =
+  ## Check syntax of an AbuseFilter filter.
+  assert filter.len > 2, "filter must not be empty string"
+  clientify(this)
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "abusefilterchecksyntax&filter=" & filter))
 
 
-# proc abuseFilterEvalExpression*(this: Wikipedia | AsyncWikipedia): Future[
-#     JsonNode] {.multisync.} =
-#   ## Evaluates an AbuseFilter expression.
-#   clientify(this)
+proc abuseFilterEvalExpression*(this: Wikipedia | AsyncWikipedia,
+    expression: string): Future[JsonNode] {.multisync.} =
+  ## Evaluates an AbuseFilter expression.
+  assert expression.len > 2, "expression must not be empty string"
+  clientify(this)
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "abusefilterevalexpression&expression=" & expression))
 
 
 # proc abuseFilterUnblockAutopromote*(this: Wikipedia | AsyncWikipedia): Future[
@@ -767,8 +773,11 @@ when isMainModule:
   #echo wiki.sanitizeMapdata(parseJson("""{"foo":"bar"}""")).pretty
   #echo wiki.jsonConfig(480, "status").pretty
   #echo wiki.jsonData("Sample.tab").pretty
-  echo wiki.abuseFilterCheckMatch(filter = """!("autoconfirmed"%20in%20user_groups)""",
-      rcid = 15).pretty
+  # echo wiki.abuseFilterCheckMatch(filter = """!("autoconfirmed"%20in%20user_groups)""",
+  #     rcid = 15).pretty
+  #echo wiki.abuseFilterCheckSyntax("foo").pretty
+  echo wiki.abuseFilterEvalExpression("""lcase("FOO")""").pretty
+
 
 
   #discard wiki.rsd()
