@@ -340,10 +340,11 @@ proc jsonConfig*(this: Wikipedia | AsyncWikipedia, namespace: int,
       command))
 
 
-# proc jsonData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Retrieve localized JSON data.
-#   clientify(this)
+proc jsonData*(this: Wikipedia | AsyncWikipedia, title: string): Future[JsonNode] {.multisync.} =
+  ## Retrieve localized JSON data.
+  assert title.len > 2, "title must not be empty string"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "jsondata&title=" & title))
 
 
 # proc languageSearch*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -749,7 +750,8 @@ when isMainModule:
   #echo wiki.siteMatrix().pretty
   #echo wiki.shortenUrl("https://en.wikipedia.org/wiki/Arctica").pretty
   #echo wiki.sanitizeMapdata(parseJson("""{"foo":"bar"}""")).pretty
-  echo wiki.jsonConfig(480, "status").pretty
+  #echo wiki.jsonConfig(480, "status").pretty
+  echo wiki.jsonData("Sample.tab").pretty
 
 
   #discard wiki.rsd()
