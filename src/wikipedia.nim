@@ -328,12 +328,16 @@ proc help*(this: Wikipedia | AsyncWikipedia, modules: string): Future[
 #   ## Import a page from another wiki, or from an XML file.
 #   clientify(this)
 
-proc jsonConfig*(this: Wikipedia | AsyncWikipedia, namespace: int, command: string): Future[JsonNode] {.
+proc jsonConfig*(this: Wikipedia | AsyncWikipedia, namespace: int,
+    command: string): Future[JsonNode] {.
   multisync.} =
   ## Allows direct access to JsonConfig subsystem.
-  assert command in ["status", "reset", "reload"], "command must be one of status, reset, reload"
+  assert command in ["status", "reset", "reload"],
+    "command must be one of status, reset, reload"
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "jsonconfig&namespace=" & $namespace & "&command=" & command))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "jsonconfig&namespace=" & $namespace & "&command=" &
+      command))
 
 
 # proc jsonData*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -523,11 +527,13 @@ proc rsd*(this: Wikipedia | AsyncWikipedia): Future[XmlNode] {.multisync.} =
   result = parseXml(await client.getContent(wikipediaUrlTest & "rsd"))
 
 
-proc sanitizeMapdata*(this: Wikipedia | AsyncWikipedia, text: JsonNode): Future[JsonNode] {.
+proc sanitizeMapdata*(this: Wikipedia | AsyncWikipedia,
+    text: JsonNode): Future[JsonNode] {.
   multisync.} =
   ## Performs data validation for Kartographer extension
   clientify(this)
-  result = parseJson(await client.postContent(wikipediaUrlTest & "sanitize-mapdata&text=" & $text))
+  result = parseJson(await client.postContent(
+      wikipediaUrlTest & "sanitize-mapdata&text=" & $text))
 
 
 # proc scribuntoConsole*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -554,12 +560,15 @@ proc sanitizeMapdata*(this: Wikipedia | AsyncWikipedia, text: JsonNode): Future[
 #   clientify(this)
 
 
-proc shortenUrl*(this: Wikipedia | AsyncWikipedia, url: string): Future[JsonNode] {.
+proc shortenUrl*(this: Wikipedia | AsyncWikipedia, url: string): Future[
+    JsonNode] {.
   multisync.} =
   ## Shorten a long URL into a shorter one. Some servers may have this disabled.
-  assert url.len > 4 and url.normalize.startsWith("http"), "URL must be valid HTTP URL"
+  assert url.len > 4 and url.normalize.startsWith("http"),
+    "URL must be valid HTTP URL"
   clientify(this)
-  result = parseJson(await client.postContent(wikipediaUrlTest & "shortenurl&url=" & url))
+  result = parseJson(await client.postContent(
+      wikipediaUrlTest & "shortenurl&url=" & url))
 
 
 proc siteMatrix*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -625,13 +634,17 @@ proc timedText*(this: Wikipedia | AsyncWikipedia, language, title,
       "&trackformat=" & trackformat))
 
 
-proc titleBlacklist*(this: Wikipedia | AsyncWikipedia, tbtitle, tbaction: string):
+proc titleBlacklist*(this: Wikipedia | AsyncWikipedia, tbtitle,
+    tbaction: string):
     Future[JsonNode] {.multisync.} =
   ## Validate a page title, filename, or username against the TitleBlacklist.
-  assert tbaction in ["create", "edit", "upload", "createtalk", "createpage", "move", "new-account"]
+  assert tbaction in ["create", "edit", "upload", "createtalk", "createpage",
+      "move", "new-account"]
   assert tbtitle.len > 2, "tbtitle must not be empty string"
   clientify(this)
-  result = parseJson(await client.getContent(wikipediaUrlTest & "titleblacklist&tbnooverride=false&tbaction=" & tbaction & "&tbtitle=" & tbtitle))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "titleblacklist&tbnooverride=false&tbaction=" & tbaction &
+      "&tbtitle=" & tbtitle))
 
 
 # proc transcodeReset*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
