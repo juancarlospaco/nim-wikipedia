@@ -139,10 +139,16 @@ proc categoryTree*(this: Wikipedia | AsyncWikipedia,
 #   clientify(this)
 
 
-# proc checkToken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Check the validity of a token from action=query&meta=tokens.
-#   clientify(this)
+proc checkToken*(this: Wikipedia | AsyncWikipedia, token, `type`: string,
+    maxtokenage: Natural = 0): Future[JsonNode] {.
+  multisync.} =
+  ## Check the validity of a token from action=query&meta=tokens.
+  assert token.len > 1, "token must not be empty string"
+  assert `type`.len > 1, "`type` must not be empty string"
+  clientify(this)
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "checktoken&token=" & token & "&type=" & `type` & (
+      if maxtokenage > 0: "&maxtokenage=" & $maxtokenage else: "")))
 
 
 # proc cirrusConfigDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
