@@ -3,6 +3,21 @@
 - Wikipedia & Wikimedia Async Standalone Single-file API Lib & App, Pretty-Printed JSON output.
 
 
+# Features
+
+- All Wikipedia API is supported, except Deprecated, Internal and Unstable calls.
+- Check the Wikipedia Documentation Wiki, the Lib is a 1:1 copy of the official Docs.
+- This Library uses API as from Year 2019.
+- All procs should return an `JsonNode` Object.
+- The order of the procs follows the order on the Wikipedia Documentation Wiki.
+- The naming of the procs follows the naming on the Wikipedia Documentation Wiki.
+- The errors on the procs follows the errors on the Wikipedia Documentation Wiki.
+- API Calls use the DoNotTrack HTTP Header.
+- The `timeout` argument is on Seconds.
+- For Proxy support define a proxy of `Proxy` type.
+- No OS-specific code, so it should work on Linux, Windows and Mac.
+
+
 # Install
 
 - ???
