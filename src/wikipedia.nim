@@ -140,8 +140,7 @@ proc categoryTree*(this: Wikipedia | AsyncWikipedia,
 
 
 proc checkToken*(this: Wikipedia | AsyncWikipedia, token, `type`: string,
-    maxtokenage: Natural = 0): Future[JsonNode] {.
-  multisync.} =
+    maxtokenage: Natural = 0): Future[JsonNode] {.multisync.} =
   ## Check the validity of a token from action=query&meta=tokens.
   assert token.len > 1, "token must not be empty string"
   assert `type`.len > 1, "`type` must not be empty string"
@@ -151,10 +150,10 @@ proc checkToken*(this: Wikipedia | AsyncWikipedia, token, `type`: string,
       if maxtokenage > 0: "&maxtokenage=" & $maxtokenage else: "")))
 
 
-# proc cirrusConfigDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Dump of CirrusSearch configuration.
-#   clientify(this)
+proc cirrusConfigDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+  ## Dump of CirrusSearch configuration.
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "cirrus-config-dump"))
 
 
 # proc cirrusMappingDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -189,8 +188,8 @@ proc checkToken*(this: Wikipedia | AsyncWikipedia, token, `type`: string,
 #   ## Create a new user account.
 #   clientify(this)
 
-proc cspReport*(this: Wikipedia | AsyncWikipedia, source: string): Future[
-    JsonNode] {.multisync.} =
+
+proc cspReport*(this: Wikipedia | AsyncWikipedia, source: string): Future[JsonNode] {.multisync.} =
   ## Used by browsers to report violations of the Content Security Policy.
   ## This module should never be used, except when used automatically by a CSP compliant web browser.
   ## Honestly I dunno what this should do. Technical Documentation of Wikipedia API is scarce.
@@ -794,8 +793,8 @@ when isMainModule:
   #echo wiki.abuseFilterEvalExpression("""lcase("FOO")""").pretty
   #echo wiki.antispoof("Foo").pretty
   #echo wiki.bounceHandler("user@example.com").pretty
-  echo wiki.categoryTree(category = "help").pretty
-
+  #echo wiki.categoryTree(category = "help").pretty
+  echo wiki.cirrusConfigDump()
 
   #discard wiki.rsd()
   #echo wiki.help(modules = "query+info|query+categorymembers").pretty
