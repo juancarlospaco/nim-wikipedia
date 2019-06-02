@@ -8,7 +8,7 @@
 - All Wikipedia API is supported, except Deprecated, Internal and Unstable calls.
 - Check the Wikipedia Documentation Wiki, the Lib is a 1:1 copy of the official Docs.
 - This Library uses API as from Year 2019.
-- All procs should return an `JsonNode` Object.
+- All procs return `JsonNode` Object.
 - The order of the procs follows the order on the Wikipedia Documentation Wiki.
 - The naming of the procs follows the naming on the Wikipedia Documentation Wiki.
 - The errors on the procs follows the errors on the Wikipedia Documentation Wiki.
@@ -52,6 +52,14 @@
 
 `nim check --styleCheck:hint wikipedia.nim`
 
+- This works with Asynchronous code ?.
+
+Yes.
+
+- This works with Synchronous code ?.
+
+Yes.
+
 - This works without SSL ?.
 
 No.
@@ -63,6 +71,10 @@ No. But is recommended to have one whatsoever, is an awesome project.
 - Are Deprecated endpoints supported ?.
 
 No.
+
+- Can I use a Sandbox fake server for testing purposes ?.
+
+Yes. The Testing server mirror of Wikipedia is provided on a string const.
 
 - I dont like some of the naming ?.
 
