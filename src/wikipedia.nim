@@ -100,10 +100,11 @@ proc bounceHandler*(this: Wikipedia | AsyncWikipedia, email: string): Future[
       wikipediaUrlTest & "bouncehandler&email=" & email))
 
 
-# proc categoryTree*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Internal module for the CategoryTree extension.
-#   clientify(this)
+proc categoryTree*(this: Wikipedia | AsyncWikipedia, category: string): Future[JsonNode] {.multisync.} =
+  ## Internal module for the CategoryTree extension.
+  assert category.len > 1, "category must not be empty string"
+  clientify(this)
+  result = parseJson(await client.postContent(wikipediaUrlTest & "categorytree&category=" & category))
 
 
 # proc centralAuthToken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -784,7 +785,8 @@ when isMainModule:
   #echo wiki.abuseFilterCheckSyntax("foo").pretty
   #echo wiki.abuseFilterEvalExpression("""lcase("FOO")""").pretty
   #echo wiki.antispoof("Foo").pretty
-  echo wiki.bounceHandler("user@example.com").pretty
+  #echo wiki.bounceHandler("user@example.com").pretty
+  echo wiki.categoryTree(category = "help").pretty
 
 
   #discard wiki.rsd()
