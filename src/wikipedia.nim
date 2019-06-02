@@ -100,11 +100,13 @@ proc bounceHandler*(this: Wikipedia | AsyncWikipedia, email: string): Future[
       wikipediaUrlTest & "bouncehandler&email=" & email))
 
 
-proc categoryTree*(this: Wikipedia | AsyncWikipedia, category: string): Future[JsonNode] {.multisync.} =
+proc categoryTree*(this: Wikipedia | AsyncWikipedia,
+    category: string): Future[JsonNode] {.multisync.} =
   ## Internal module for the CategoryTree extension.
   assert category.len > 1, "category must not be empty string"
   clientify(this)
-  result = parseJson(await client.postContent(wikipediaUrlTest & "categorytree&category=" & category))
+  result = parseJson(await client.getContent(
+      wikipediaUrlTest & "categorytree&category=" & category))
 
 
 # proc centralAuthToken*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
