@@ -156,27 +156,29 @@ proc cirrusConfigDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.mul
   result = parseJson(await client.getContent(wikipediaUrlTest & "cirrus-config-dump"))
 
 
-# proc cirrusMappingDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Dump of CirrusSearch mapping for this wiki.
-#   clientify(this)
+proc cirrusMappingDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+  ## Dump of CirrusSearch mapping for this wiki.
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "cirrus-mapping-dump"))
 
 
-# proc cirrusProfilesDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Dump of CirrusSearch profiles for this wiki.
-#   clientify(this)
+proc cirrusProfilesDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+  ## Dump of CirrusSearch profiles for this wiki.
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "cirrus-profiles-dump&verbose=true"))
 
 
-# proc cirrusSettingsDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Dump of CirrusSearch settings for this wiki.
-#   clientify(this)
+proc cirrusSettingsDump*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
+  multisync.} =
+  ## Dump of CirrusSearch settings for this wiki.
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "cirrus-settings-dump"))
 
-# proc clearHasmsg*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Clears the hasmsg flag for the current user.
-#   clientify(this)
+
+proc clearHasmsg*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
+  ## Clears the hasmsg flag for the current user.
+  clientify(this)
+  result = parseJson(await client.postContent(wikipediaUrlTest & "clearhasmsg"))
 
 
 # proc compare*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.multisync.} =
@@ -199,10 +201,12 @@ proc cspReport*(this: Wikipedia | AsyncWikipedia, source: string): Future[JsonNo
       wikipediaUrlTest & "cspreport&reportonly=true&source=" & source))
 
 
-# proc cxConfiguration*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Fetch the Content Translation configuration json for the given language pair.
-#   clientify(this)
+proc cxConfiguration*(this: Wikipedia | AsyncWikipedia, `from`, to: string): Future[JsonNode] {.multisync.} =
+  ## Fetch the Content Translation configuration json for the given language pair.
+  assert `from`.len == 2, "`from` must be a 2-char standard ISO lang code string"
+  assert to.len == 2, "to must be a 2-char standard ISO lang code string"
+  clientify(this)
+  result = parseJson(await client.getContent(wikipediaUrlTest & "cxconfiguration&from=" & `from` & "&to=" & to))
 
 
 # proc cxDelete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -794,7 +798,13 @@ when isMainModule:
   #echo wiki.antispoof("Foo").pretty
   #echo wiki.bounceHandler("user@example.com").pretty
   #echo wiki.categoryTree(category = "help").pretty
-  echo wiki.cirrusConfigDump()
+  #echo wiki.cirrusConfigDump().pretty
+  #echo wiki.cirrusMappingDump().pretty
+  #echo wiki.cirrusProfilesDump().pretty
+  #echo wiki.cirrusSettingsDump().pretty
+  #echo wiki.clearHasmsg().pretty
+  echo wiki.cxConfiguration(`from` = "es", to= "en").pretty
+
 
   #discard wiki.rsd()
   #echo wiki.help(modules = "query+info|query+categorymembers").pretty
