@@ -4,11 +4,11 @@ from xmltree import XmlNode
 
 
 const
-  o = "?format=json&formatversion=2&servedby=true&curtimestamp=true&responselanginfo=true&errorformat=plaintext&action="
-  wikipediaUrl* = "https://wikipedia.org/w/api.php" & o ## Wikipedia API URL.
-  mediaWikiUrl* = "https://mediawiki.org/w/api.php" & o ## MediaWiki API URL.
-  wikipediaUrlTest* = "https://test.wikipedia.org/w/api.php" & o ## Test Wikipedia API URL (Fake).
-  wikiMediaCommonsUrl* = "https://commons.wikimedia.org/w/api.php" & o ## WikiMedia Commons API URL.
+  params = "?format=json&formatversion=2&servedby=true&curtimestamp=true&responselanginfo=true&errorformat=plaintext&action="
+  wikipediaUrl* = "https://wikipedia.org/w/api.php" & params ## Wikipedia API URL.
+  mediaWikiUrl* = "https://mediawiki.org/w/api.php" & params ## MediaWiki API URL.
+  wikipediaUrlTest* = "https://test.wikipedia.org/w/api.php" & params ## Test Wikipedia API URL (Fake).
+  wikiMediaCommonsUrl* = "https://commons.wikimedia.org/w/api.php" & params ## WikiMedia Commons API URL.
 
 
 type
