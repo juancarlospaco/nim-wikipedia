@@ -1,4 +1,5 @@
-import asyncdispatch, httpclient, strutils, json
+import asyncdispatch, httpclient, json
+from strutils import normalize, startsWith, split
 from xmlparser import parseXml
 from xmltree import XmlNode
 
@@ -209,10 +210,14 @@ proc cxConfiguration*(this: Wikipedia | AsyncWikipedia, `from`, to: string): Fut
   result = parseJson(await client.getContent(wikipediaUrlTest & "cxconfiguration&from=" & `from` & "&to=" & to))
 
 
-# proc cxDelete*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
-#   multisync.} =
-#   ## Delete a draft translation created using the Content Translation extension.
-#   clientify(this)
+proc cxDelete*(this: Wikipedia | AsyncWikipedia, `from`, to, sourcetitle, token: string): Future[JsonNode] {.multisync.} =
+  ## Delete a draft translation created using the Content Translation extension.
+  assert `from`.len == 2, "`from` must be a 2-char standard ISO lang code string"
+  assert to.len == 2, "to must be a 2-char standard ISO lang code string"
+  assert sourcetitle.len > 2, "sourcetitle must not be empty string"
+  assert token.len > 2, "token must not be empty string"
+  clientify(this) # FIXME The following parameter was found in the query string, but must be in the POST body: token.
+  result = parseJson(await client.postContent(wikipediaUrlTest & "cxdelete&from=" & `from` & "&to=" & to & "&sourcetitle=" & sourcetitle & "&token=" & token))
 
 
 # proc cxPublish*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
@@ -806,7 +811,8 @@ when isMainModule:
   #echo wiki.cirrusProfilesDump().pretty
   #echo wiki.cirrusSettingsDump().pretty
   #echo wiki.clearHasmsg().pretty
-  echo wiki.cxConfiguration(`from` = "es", to= "en").pretty
+  #echo wiki.cxConfiguration(`from` = "es", to= "en").pretty
+  echo wiki.cxDelete(`from` = "es", to= "en", sourcetitle= "Foo", token="invalid").pretty
 
 
   #discard wiki.rsd()
