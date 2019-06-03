@@ -774,6 +774,9 @@ proc zeroconfig*(this: Wikipedia | AsyncWikipedia): Future[JsonNode] {.
   result = parseJson(await client.getContent(wikipediaUrlTest & "zeroconfig"))
 
 
+###############################################################################
+
+
 when isMainModule:
   # import parseopt, terminal, random
   # {.passL: "-s", passC: "-flto -ffast-math".}
